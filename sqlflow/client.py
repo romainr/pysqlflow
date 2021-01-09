@@ -215,8 +215,13 @@ class Client:
                     self.display_html(response.message.message, reader)
                 else:
                     _LOGGER.info(response.message.message)
+                    rows = [[response.message.message]]
                     for response in reader.read_until_type_changed():
                         _LOGGER.info(response.message.message)
+                        rows.append([response.message.message])
+                    def get_rows():
+                      return rows
+                    compound_message.add_rows(Rows(['msg'], get_rows), None)
                     response = reader.last_response
                     if response is not None:
                         rtype = response.WhichOneof('response')
